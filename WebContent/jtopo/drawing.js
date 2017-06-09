@@ -118,10 +118,10 @@
                     
                     if (y>220){
                     	nodetext.setLocation(x+52, y-100);
-                    	nodetext.rotate = -1.15;
+                    	nodetext.rotate = -1.2;
                     	console.log("asdfa");
                     }else{
-                    	nodetext.setLocation(x+70, y+130);
+                    	nodetext.setLocation(x+52, y+100);
                     	nodetext.rotate = 1.135;
                     }
                     nodetext.text = text;// 文字
@@ -148,20 +148,20 @@
 
 
                 //添加节点
-                var n1 = node(75, 350);
-                var n2 = node(120, 220);//y=-2.5*x+520，人员
+                var n1 = node(77, 350);
+                var n2 = node(117, 220);//y=-2.5*x+520，人员
 
                 var n3 = node(191, 120);
                 var n4 = node(245, 245);//y=2.35*x-330.75，机器
 
-                var n5 = node(325, 350);
-                var n6 = node(370, 220);//y=-2.5*x+1145，物料
+                var n5 = node(327, 350);
+                var n6 = node(367, 220);//y=-2.5*x+1145，物料
 
                 var n7 = node(441, 120);
                 var n8 = node(495, 245);//y=2.35*x-918.25，方法
 
-                var n9 = node(575, 350);
-                var n10 = node(620, 220);//y=-2.5*x+1770，环境
+                var n9 = node(577, 350);
+                var n10 = node(617, 220);//y=-2.5*x+1770，环境
 
                 var n11 = node(692, 120);
                 var n12 = node(745, 245);//y=2.35*x-1508.1，测量
@@ -313,8 +313,8 @@
 
                     //获取表1的数据
                     var SheetNum1 = excelData.Sheet1.length;
-                    var Coordinate = new Array();
-                    Coordinate[0] =0;
+                    var Coordinate1 = new Array();
+                    Coordinate1[0] =0;
                     for (var i = 0; i < SheetNum1; i++) {
                     	var x = 120-(i+1)*30;
                         var y = -2.5*x + 520;
@@ -339,12 +339,59 @@
                         link.strokeColor = '0,0,0';
                         link.lineWidth = 1;
                         
-                        Coordinate.push(x+11);
-                        Coordinate.push(y+15);
-                        if (Coordinate[2*i]!==0){
+                        Coordinate1.push(x+11);
+                        Coordinate1.push(y+15);
+                        if (Coordinate1[2*i]!==0){
                         	var nullSlashNode = new JTopo.Node();
-                        	var xSlashNode = Coordinate[2*i-1];
-                        	var ySlashNode = Coordinate[2*i];
+                        	var xSlashNode = Coordinate1[2*i-1];
+                        	var ySlashNode = Coordinate1[2*i];
+                        	console.log(ySlashNode);
+                        	nullSlashNode.setLocation(xSlashNode, ySlashNode);
+                        	nullSlashNode.setSize(1, 1);
+                            scene.add(nullSlashNode);
+                        	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
+                        	linkSlash.strokeColor = '0,0,0';
+                        	linkSlash.lineWidth = 1;
+                        	scene.add(linkSlash);
+                        }
+                        scene.add(link);
+                    }
+                    
+                    
+                    //获取表格2中的数据
+                    var SheetNum2 = excelData.Sheet1.length;
+                    var Coordinate2 = new Array();
+                    Coordinate2[0] =0;
+                    for (var i = 0; i < SheetNum2; i++) {
+                    	var x = 245-(i+1)*30;
+                        var y = 2.35*x - 330.75;
+
+                        //定义第一级文本节点
+                        var textnode = excelData.Sheet1[i].Machine;
+                        var excelnode = excelNode(x-50, y, textnode);
+                        
+                        var nullnode = new JTopo.Node();
+                        if(y>220){
+                        	nullnode.setLocation(x-65, y+15);
+                        }else{
+                        	nullnode.setLocation(x+65, y-15);
+                        }
+                        nullnode.setSize(1, 1);
+                         scene.add(nullnode);
+                        
+                        var nullNode = new JTopo.Node();
+                        nullNode.setLocation(x-5, y);
+                        
+                        var link = new JTopo.Link(nullnode, nullNode);
+                        link.strokeColor = '0,0,0';
+                        link.lineWidth = 1;
+                        
+                        Coordinate2.push(x+11);
+                        Coordinate2.push(y+15);
+                        if (Coordinate2[2*i]!==0){
+                        	var nullSlashNode = new JTopo.Node();
+                        	var xSlashNode = Coordinate2[2*i-1];
+                        	var ySlashNode = Coordinate2[2*i];
                         	console.log(ySlashNode);
                         	nullSlashNode.setLocation(xSlashNode, ySlashNode);
                         	nullSlashNode.setSize(1, 1);
