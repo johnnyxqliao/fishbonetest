@@ -1,0 +1,257 @@
+                    //连线功能模块
+                    var beginNode = null;
+                    var tempNodeA = new JTopo.Node('tempA');
+                    ;tempNodeA.setSize(1, 1);
+
+                    var tempNodeZ = new JTopo.Node('tempZ');
+                    ;tempNodeZ.setSize(1, 1);
+
+                    var link = new JTopo.FoldLink(tempNodeA,tempNodeZ);
+                    link.direction = 'vertical' || 'horizontal';
+                    link.arrowsRadius = 15;
+                    //定义箭头大小
+                    link.lineWidth = 3;
+                    // 线宽
+                    link.bundleOffset = 60;
+                    //箭头偏执
+                    link.bundleGap = 20;
+                    // 线与线之间的间距
+                    link.textOffsetY = 3;
+                    // 线补偿
+                    link.strokeColor = JTopo.util.randomColor();
+                    // 添加随机颜色
+
+                    scene.mouseup(function(e) {
+                        if (e.button == 2) {
+                            scene.remove(link);
+                            return;
+                        }
+                        if (e.target != null && e.target instanceof JTopo.Node) {
+                            if (beginNode == null) {
+                                beginNode = e.target;
+                                scene.add(link);
+                                tempNodeA.setLocation(e.x, e.y);
+                                tempNodeZ.setLocation(e.x, e.y);
+                            } else if (beginNode !== e.target) {
+                                var endNode = e.target;
+                                var l = new JTopo.FoldLink(beginNode,endNode);
+                                l.direction = 'vertical' || 'horizontal';
+                                l.arrowsRadius = 15;
+                                //
+                                l.lineWidth = 3;
+                                //
+                                l.bundleOffset = 60;
+                                //
+                                l.bundleGap = 20;
+                                //
+                                l.textOffsetY = 3;
+                                //
+                                l.strokeColor = JTopo.util.randomColor();
+                                //
+                                scene.add(l);
+                                beginNode = null;
+                                scene.remove(link);
+                            } else {
+                                beginNode = null;
+                            }
+                        } else {
+                            scene.remove(link);
+                        }
+                        });
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                         /*  //获取表2的数据
+                    var SheetNum2 = excelData.Sheet2.length;
+                    for (var i = 0; i < SheetNum2; i++) {
+                        var paraNum = 80 / SheetNum2;
+                        var x = 145 + (i + 1) * paraNum;
+                        var y = 2.35 * (145 + (i + 1) * paraNum) - 330.75;
+
+                        //定义文本节点
+                        var textnode = new JTopo.Node(excelData.Sheet2[i].Machine);
+                        textnode.setLocation((y - 70) / 2.35, y);
+                        textnode.textPosition = 'Middle_Center';
+                        textnode.fontColor = "0,0,0";
+                        textnode.fillColor = "175,238,238";
+                        textnode.font = '12px 微软雅黑';
+                        // 字体
+                        textnode.setSize(130, 18);
+                        // 尺寸
+                        textnode.borderRadius = 10;
+                        // 圆角
+                        textnode.borderWidth = 2;
+                        // 边框的宽度
+
+                        //定义连线节点
+                        var nullnode = new JTopo.Node();
+                        nullnode.setLocation(x, y);
+
+                        //连线并设置线段属性
+                        var textLink = new JTopo.Link(textnode,nullnode);
+                        textLink.arrowsRadius = 4;
+                        textLink.lineWidth = 1;
+                        textLink.strokeColor = '0,0,0';
+
+                        scene.add(textnode);
+                        scene.add(textLink);
+                    }
+
+                    //获取表3的数据
+                    var SheetNum3 = excelData.Sheet3.length;
+                    for (var i = 0; i < SheetNum3; i++) {
+                        var paraNum = 80 / SheetNum3;
+                        var x = 270 + (i + 1) * paraNum;
+                        var y = -2.5 * (270 + (i + 1) * paraNum) + 1145;
+
+                        //定义文本节点
+                        var textnode = new JTopo.Node(excelData.Sheet3[i].Material);
+                        textnode.setLocation((745 - y) / 2.5, y);
+                        textnode.textPosition = 'Middle_Center';
+                        textnode.fontColor = "0,0,0";
+                        textnode.fillColor = "175,238,238";
+                        textnode.font = '12px 微软雅黑';
+                        // 字体
+                        textnode.setSize(130, 18);
+                        // 尺寸
+                        textnode.borderRadius = 10;
+                        // 圆角
+                        textnode.borderWidth = 2;
+                        // 边框的宽度
+
+                        //定义连线节点
+                        var nullnode = new JTopo.Node();
+                        nullnode.setLocation(x, y);
+
+                        //连线并设置线段属性
+                        var textLink = new JTopo.Link(textnode,nullnode);
+                        textLink.arrowsRadius = 4;
+                        textLink.lineWidth = 1;
+                        textLink.strokeColor = '0,0,0';
+
+                        scene.add(textnode);
+                        scene.add(textLink);
+                    }
+
+                    //获取表4的数据
+                    var SheetNum4 = excelData.Sheet4.length;
+                    for (var i = 0; i < SheetNum4; i++) {
+                        var paraNum = 80 / SheetNum4;
+                        var x = 395 + (i + 1) * paraNum;
+                        var y = 2.35 * (395 + (i + 1) * paraNum) - 918.25;
+
+                        //定义文本节点
+                        var textnode = new JTopo.Node(excelData.Sheet4[i].Method);
+                        textnode.setLocation((y + 520) / 2.35, y);
+                        textnode.textPosition = 'Middle_Center';
+                        textnode.fontColor = "0,0,0";
+                        textnode.fillColor = "175,238,238";
+                        textnode.font = '12px 微软雅黑';
+                        // 字体
+                        textnode.setSize(130, 18);
+                        // 尺寸
+                        textnode.borderRadius = 10;
+                        // 圆角
+                        textnode.borderWidth = 2;
+                        // 边框的宽度
+
+                        //定义连线节点
+                        var nullnode = new JTopo.Node();
+                        nullnode.setLocation(x, y);
+
+                        //连线并设置线段属性
+                        var textLink = new JTopo.Link(textnode,nullnode);
+                        textLink.arrowsRadius = 4;
+                        textLink.lineWidth = 1;
+                        textLink.strokeColor = '0,0,0';
+
+                        scene.add(textnode);
+                        scene.add(textLink);
+                    }
+
+                    //获取表5的数据
+                    var SheetNum5 = excelData.Sheet5.length;
+                    for (var i = 0; i < SheetNum5; i++) {
+                        var paraNum = 80 / SheetNum5;
+                        var x = 520 + (i + 1) * paraNum;
+                        var y = -2.5 * (520 + (i + 1) * paraNum) + 1770;
+
+                        //定义文本节点
+                        var textnode = new JTopo.Node(excelData.Sheet5[i].Environment);
+                        textnode.setLocation((1370 - y) / 2.5, y);
+                        textnode.textPosition = 'Middle_Center';
+                        textnode.fontColor = "0,0,0";
+                        textnode.fillColor = "175,238,238";
+                        textnode.font = '12px 微软雅黑';
+                        // 字体
+                        textnode.setSize(130, 18);
+                        // 尺寸
+                        textnode.borderRadius = 10;
+                        // 圆角
+                        textnode.borderWidth = 2;
+                        // 边框的宽度
+
+                        //定义连线节点
+                        var nullnode = new JTopo.Node();
+                        nullnode.setLocation(x, y);
+
+                        //连线并设置线段属性
+                        var textLink = new JTopo.Link(textnode,nullnode);
+                        textLink.arrowsRadius = 4;
+                        textLink.lineWidth = 1;
+                        textLink.strokeColor = '0,0,0';
+
+                        scene.add(textnode);
+                        scene.add(textLink);
+                    }
+
+                    //获取表6的数据
+                    var SheetNum6 = excelData.Sheet6.length;
+                    for (var i = 0; i < SheetNum6; i++) {
+                        var paraNum = 80 / SheetNum6;
+                        var x = 645 + (i + 1) * paraNum;
+                        var y = 2.35 * (645 + (i + 1) * paraNum) - 1508.1;
+
+                        //定义文本节点
+                        var textnode = new JTopo.Node(excelData.Sheet6[i].Measure);
+                        textnode.setLocation((y + 1100) / 2.35, y);
+                        textnode.textPosition = 'Middle_Center';
+                        textnode.fontColor = "0,0,0";
+                        textnode.fillColor = "175,238,238";
+                        textnode.font = '12px 微软雅黑';
+                        // 字体
+                        textnode.setSize(130, 18);
+                        // 尺寸
+                        textnode.borderRadius = 10;
+                        // 圆角
+                        textnode.borderWidth = 2;
+                        // 边框的宽度
+                        //定义连线节点
+                        var nullnode = new JTopo.Node();
+                        nullnode.setLocation(x, y);
+
+                        //连线并设置线段属性
+                        var textLink = new JTopo.Link(textnode,nullnode);
+                        textLink.arrowsRadius = 4;
+                        textLink.lineWidth = 1;
+                        textLink.strokeColor = '0,0,0';
+
+                        scene.add(textnode);
+                        scene.add(textLink);
+                    } */
