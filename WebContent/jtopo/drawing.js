@@ -110,6 +110,8 @@
                 }
 /* 
  *定义六个文字节点函数 
+ *
+ *
  */
                 function nodetext(x, y, text) {
                     var nodetext = new JTopo.Node();
