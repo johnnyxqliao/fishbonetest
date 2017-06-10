@@ -71,6 +71,7 @@
                      //绘制鱼头 
                      var fishBrain = new JTopo.Node();
                      fishBrain.text = '待解决问题';// 文字
+                     fishBrain.id = "10";
                      fishBrain.textPosition = 'Middle_Center';// 文字居中
                      fishBrain.textOffsetY =8;
                      fishBrain.font = '18px 微软雅黑';// 字体
@@ -82,6 +83,11 @@
                      fishBrain.fillColor = '255,222,173';//边框颜色 
                      fishBrain.dragable = false;
                      scene.add(fishBrain);
+//                     var aaa = fishBrain.getBound().id+" ";
+//                     if(aaa===10){
+//                    	 console.log(aaa);
+//                     }
+                     
 
                      //绘制鱼身
                      var fishstart = new JTopo.Node();
@@ -121,8 +127,8 @@
                     	nodetext.rotate = -1.2;
                     	console.log("asdfa");
                     }else{
-                    	nodetext.setLocation(x+52, y+100);
-                    	nodetext.rotate = 1.135;
+                    	nodetext.setLocation(x+47, y+90);
+                    	nodetext.rotate = 1.15;
                     }
                     nodetext.text = text;// 文字
                     nodetext.textPosition = 'Middle_Center';// 文字居中
@@ -151,20 +157,20 @@
                 var n1 = node(77, 350);
                 var n2 = node(117, 220);//y=-2.5*x+520，人员
 
-                var n3 = node(191, 120);
-                var n4 = node(245, 245);//y=2.35*x-330.75，机器
+                var n3 = node(193, 120);
+                var n4 = node(241, 245);//y=2.35*x-330.75，机器
 
                 var n5 = node(327, 350);
                 var n6 = node(367, 220);//y=-2.5*x+1145，物料
 
-                var n7 = node(441, 120);
-                var n8 = node(495, 245);//y=2.35*x-918.25，方法
+                var n7 = node(443, 120);
+                var n8 = node(491, 245);//y=2.35*x-918.25，方法
 
                 var n9 = node(577, 350);
                 var n10 = node(617, 220);//y=-2.5*x+1770，环境
 
-                var n11 = node(692, 120);
-                var n12 = node(745, 245);//y=2.35*x-1508.1，测量
+                var n11 = node(695, 120);
+                var n12 = node(741, 245);//y=2.35*x-1508.1，测量
 
                 //连线
                 linkNode(n1, n2);
@@ -311,7 +317,7 @@
                     //将表格中获取的数据发送到前台界面
                     excelData = JSON.parse(output);
 
-                    //获取表1的数据
+//获取表1的数据
                     var SheetNum1 = excelData.Sheet1.length;
                     var Coordinate1 = new Array();
                     Coordinate1[0] =0;
@@ -321,7 +327,8 @@
 
                         //定义第一级文本节点
                         var textnode = excelData.Sheet1[i].Man;
-                        var excelnode = excelNode(x-50, y, textnode);
+                        var id = textnode+i;
+                        var excelnode = excelNode(x-50, y, textnode, id);
                         
                         var nullnode = new JTopo.Node();
                         if(y>220){
@@ -358,60 +365,238 @@
                     }
                     
                     
-                    //获取表格2中的数据
-                    var SheetNum2 = excelData.Sheet1.length;
+//获取表2的数据
+                    var SheetNum2 = excelData.Sheet2.length;
                     var Coordinate2 = new Array();
                     Coordinate2[0] =0;
                     for (var i = 0; i < SheetNum2; i++) {
                     	var x = 245-(i+1)*30;
                         var y = 2.35*x - 330.75;
-
-                        //定义第一级文本节点
-                        var textnode = excelData.Sheet1[i].Machine;
-                        var excelnode = excelNode(x-50, y, textnode);
-                        
-                        var nullnode = new JTopo.Node();
-                        if(y>220){
-                        	nullnode.setLocation(x-65, y+15);
-                        }else{
-                        	nullnode.setLocation(x+65, y-15);
-                        }
-                        nullnode.setSize(1, 1);
-                         scene.add(nullnode);
-                        
-                        var nullNode = new JTopo.Node();
-                        nullNode.setLocation(x-5, y);
-                        
-                        var link = new JTopo.Link(nullnode, nullNode);
-                        link.strokeColor = '0,0,0';
-                        link.lineWidth = 1;
-                        
-                        Coordinate2.push(x+11);
-                        Coordinate2.push(y+15);
-                        if (Coordinate2[2*i]!==0){
-                        	var nullSlashNode = new JTopo.Node();
-                        	var xSlashNode = Coordinate2[2*i-1];
-                        	var ySlashNode = Coordinate2[2*i];
-                        	console.log(ySlashNode);
-                        	nullSlashNode.setLocation(xSlashNode, ySlashNode);
-                        	nullSlashNode.setSize(1, 1);
-                            scene.add(nullSlashNode);
-                        	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
-                        	linkSlash.strokeColor = '0,0,0';
-                        	linkSlash.lineWidth = 1;
-                        	scene.add(linkSlash);
-                        }
-                        scene.add(link);
+                  //定义第二级文本节点
+                    var textnode = excelData.Sheet2[i].Machine;//提取表格中的数据
+                    var id = textnode+i;
+                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
+                    
+                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
+                    nullnode.setLocation(x-65, y+15);
+                    nullnode.setSize(1, 1);
+                     scene.add(nullnode);
+                    
+                    var nullNode = new JTopo.Node();//下划线的第二个空节点
+                    nullNode.setLocation(x-5, y);
+                    
+                    var link = new JTopo.Link(nullnode, nullNode);
+                    link.strokeColor = '0,0,0';
+                    link.lineWidth = 1;
+                    
+                    Coordinate2.push(x+10);
+                    Coordinate2.push(y+15);
+                    if (Coordinate2[2*i]!==0){
+                    	var nullSlashNode = new JTopo.Node();
+                    	var xSlashNode = Coordinate2[2*i-1];
+                    	var ySlashNode = Coordinate2[2*i];
+                    	console.log(ySlashNode);
+                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
+                    	nullSlashNode.setSize(1, 1);
+                        scene.add(nullSlashNode);
+                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
+                    	linkSlash.strokeColor = '0,0,0';
+                    	linkSlash.lineWidth = 1;
+                    	scene.add(linkSlash);
                     }
+                    scene.add(link);
+                }
+                    
+                    
+//获取表3的数据
+                    var SheetNum3 = excelData.Sheet3.length;
+                    var Coordinate3 = new Array();
+                    Coordinate3[0] =0;
+                    for (var i = 0; i < SheetNum3; i++) {
+                    	var x = 370-(i+1)*30;
+                        var y = -2.5*x + 1145;
+                  //定义第二级文本节点
+                    var textnode = excelData.Sheet3[i].Material;//提取表格中的数据
+                    var id = textnode+i;
+                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
+                    
+                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
+                    if(y>220){
+                    	nullnode.setLocation(x-65, y+15);
+                    }else{
+                    	nullnode.setLocation(x+65, y-15);
+                    }
+                    nullnode.setSize(1, 1);
+                     scene.add(nullnode);
+                    
+                    var nullNode = new JTopo.Node();//下划线的第二个空节点
+                    nullNode.setLocation(x-5, y);
+                    
+                    var link = new JTopo.Link(nullnode, nullNode);
+                    link.strokeColor = '0,0,0';
+                    link.lineWidth = 1;
+                    
+                    Coordinate3.push(x+11);
+                    Coordinate3.push(y+15);
+                    if (Coordinate3[2*i]!==0){
+                    	var nullSlashNode = new JTopo.Node();
+                    	var xSlashNode = Coordinate3[2*i-1];
+                    	var ySlashNode = Coordinate3[2*i];
+                    	console.log(ySlashNode);
+                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
+                    	nullSlashNode.setSize(1, 1);
+                        scene.add(nullSlashNode);
+                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
+                    	linkSlash.strokeColor = '0,0,0';
+                    	linkSlash.lineWidth = 1;
+                    	scene.add(linkSlash);
+                    }
+                    scene.add(link);
+                }
+                    
+                    
+//获取表4的数据
+                    var SheetNum4 = excelData.Sheet4.length;
+                    var Coordinate4 = new Array();
+                    Coordinate4[0] =0;
+                    for (var i = 0; i < SheetNum4; i++) {
+                    	var x = 495-(i+1)*30;
+                        var y = 2.35*x - 918.25;
+                  //定义第二级文本节点
+                    var textnode = excelData.Sheet4[i].Method;//提取表格中的数据
+                    var id = textnode+i;
+                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
+                    
+                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
+                    nullnode.setLocation(x-65, y+15);
+                    nullnode.setSize(1, 1);
+                     scene.add(nullnode);
+                    
+                    var nullNode = new JTopo.Node();//下划线的第二个空节点
+                    nullNode.setLocation(x-5, y);
+                    
+                    var link = new JTopo.Link(nullnode, nullNode);
+                    link.strokeColor = '0,0,0';
+                    link.lineWidth = 1;
+                    
+                    Coordinate4.push(x+10);
+                    Coordinate4.push(y+15);
+                    if (Coordinate4[2*i]!==0){
+                    	var nullSlashNode = new JTopo.Node();
+                    	var xSlashNode = Coordinate4[2*i-1];
+                    	var ySlashNode = Coordinate4[2*i];
+                    	console.log(ySlashNode);
+                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
+                    	nullSlashNode.setSize(1, 1);
+                        scene.add(nullSlashNode);
+                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
+                    	linkSlash.strokeColor = '0,0,0';
+                    	linkSlash.lineWidth = 1;
+                    	scene.add(linkSlash);
+                    }
+                    scene.add(link);
+                }
+                    
+                    
+//获取表5的数据
+                    var SheetNum5 = excelData.Sheet5.length;
+                    var Coordinate5 = new Array();
+                    Coordinate5[0] =0;
+                    for (var i = 0; i < SheetNum5; i++) {
+                    	var x = 620-(i+1)*30;
+                        var y = -2.5*x + 1770;
+                  //定义第二级文本节点
+                    var textnode = excelData.Sheet5[i].Environment;//提取表格中的数据
+                    var id = textnode+i;
+                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
+                    
+                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
+                    if(y>220){
+                    	nullnode.setLocation(x-65, y+15);
+                    }else{
+                    	nullnode.setLocation(x+65, y-15);
+                    }
+                    nullnode.setSize(1, 1);
+                     scene.add(nullnode);
+                    
+                    var nullNode = new JTopo.Node();//下划线的第二个空节点
+                    nullNode.setLocation(x-5, y);
+                    
+                    var link = new JTopo.Link(nullnode, nullNode);
+                    link.strokeColor = '0,0,0';
+                    link.lineWidth = 1;
+                    
+                    Coordinate5.push(x+11);
+                    Coordinate5.push(y+15);
+                    if (Coordinate5[2*i]!==0){
+                    	var nullSlashNode = new JTopo.Node();
+                    	var xSlashNode = Coordinate5[2*i-1];
+                    	var ySlashNode = Coordinate5[2*i];
+                    	console.log(ySlashNode);
+                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
+                    	nullSlashNode.setSize(1, 1);
+                        scene.add(nullSlashNode);
+                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
+                    	linkSlash.strokeColor = '0,0,0';
+                    	linkSlash.lineWidth = 1;
+                    	scene.add(linkSlash);
+                    }
+                    scene.add(link);
+                }
+                    
+                    
+//获取表6的数据
+                    var SheetNum6 = excelData.Sheet6.length;
+                    var Coordinate6 = new Array();
+                    Coordinate6[0] =0;
+                    for (var i = 0; i < SheetNum6; i++) {
+                    	var x = 745-(i+1)*30;
+                        var y = 2.35*x - 1508.1;
+                  //定义第二级文本节点
+                    var textnode = excelData.Sheet6[i].Measure;//提取表格中的数据
+                    var id = textnode+i;
+                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
+                    
+                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
+                    nullnode.setLocation(x-65, y+15);
+                    nullnode.setSize(1, 1);
+                     scene.add(nullnode);
+                    
+                    var nullNode = new JTopo.Node();//下划线的第二个空节点
+                    nullNode.setLocation(x-5, y);
+                    
+                    var link = new JTopo.Link(nullnode, nullNode);
+                    link.strokeColor = '0,0,0';
+                    link.lineWidth = 1;
+                    
+                    Coordinate6.push(x+10);
+                    Coordinate6.push(y+15);
+                    if (Coordinate6[2*i]!==0){
+                    	var nullSlashNode = new JTopo.Node();
+                    	var xSlashNode = Coordinate6[2*i-1];
+                    	var ySlashNode = Coordinate6[2*i];
+                    	console.log(ySlashNode);
+                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
+                    	nullSlashNode.setSize(1, 1);
+                        scene.add(nullSlashNode);
+                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
+                    	linkSlash.strokeColor = '0,0,0';
+                    	linkSlash.lineWidth = 1;
+                    	scene.add(linkSlash);
+                    }
+                    scene.add(link);
+                }
+                    
                 }
                 
 /* 
  * 定义从excel中读取数据，并向画布中添加节点函数
  */
                 var currentNode = null;
-                function excelNode(x, y, text){
+                function excelNode(x, y, text, id){
                 	//定义导入节点的基本属性
                 	var excelNode = new JTopo.Node(text);
+                	excelNode.id = id;
                 	excelNode.setLocation(x, y);
                 	excelNode.textPosition = 'Middle_Center';
                 	excelNode.textOffsetY =5;
@@ -420,7 +605,6 @@
                 	excelNode.font = '14px 微软雅黑';
                 	excelNode.setSize(50, 15);
                 	excelNode.dragable = false;
-//                  	excelNode.borderRadius = 10;
                   	excelNode.borderWidth = 0.1;
                 	scene.add(excelNode);
                     //定义从excel中导入节点的右键函数
@@ -445,15 +629,38 @@
 	                var str = lineFeed(str);
 	                console.log(str);
 	                var childNode = new JTopo.Node(str);
-	                var xChild = (520-y)/2.5-50*num;
+	                if(y>220){//当前节点在鱼骨下方
+                        	if(x<120){//判断当前节点在下方的那个位置
+                        		var xChild = (520-y)/2.5-50*num;
+                        	}else if(120<x && x<370){
+                        		var xChild = (1145-y)/2.5-50*num;
+                        	}else{
+                        		var xChild = (1770-y)/2.5-50*num;
+                        	}
+                        }else{
+                        	if(x<245){//判断当前节点在下方的那个位置
+                        		var xChild = (-330.75-y)/(-2.35)-50*num;
+                        	}else if(245<x && x<495){
+                        		var xChild = (-918.25-y)/(-2.35)-50*num;
+                        	}else{
+                        		var xChild = (-1508.1-y)/(-2.35)-50*num;
+                        	}
+                        }
+	                
+	                
 	                var yChild = y+35;
 	                childNode.setLocation(xChild, yChild);
 	                childNode.fontColor = "0,0,0";
 	                childNode.textPosition = 'Bottom_Center';
 	                childNode.fillColor = "255,255,255";
-                	childNode.font = 'blod 13px 微软雅黑';
+                	childNode.font = 'blod 14px 微软雅黑';
                 	childNode.dragable = false;
-                	childNode.rotate = -1.2;
+                	if(y>220){
+                		childNode.rotate = -1.2;
+                	}else{
+                		childNode.rotate = 1.2;
+                	}
+                	
                 	childNode.setSize(40, 10);
 	                scene.add(childNode);
 	                
@@ -469,6 +676,8 @@
 	                	var x2 = x1+0;
 	                	slashLineNode2.setLocation(x2, y2);
 	                }else{
+	                	var y2 = y1-55;
+	                	var x2 = x1-30;
 	                	slashLineNode2.setLocation(x2, y2);
 	                }
 	                var slashLine = new JTopo.Link(slashLineNode1, slashLineNode2);
@@ -553,27 +762,55 @@
                 	var num = 1;//初始化节点右键次数
                 	var countNode = 0;
                     var len = Node.length;
-                	var left = currentNode.getBound().left;//获取当前节点的横纵坐标
+                	var left = currentNode.getBound().left;//获取当前节点的横纵坐标以及id信息
                     var top = currentNode.getBound().top;
+                    var id = currentNode.getBound().id;
+                     
                     
                     //输出与该节点对应的num,即该记录该节点右键次数
-                    var array1 = new Array();
+                    var idArray = new Array();
                     for (var i=0; i<len; i+=4){
                     	console.log(i);
-                    array1[i/4] = Node[i];
+                    idArray[i/4] = Node[i];
                     }
-                    var numnode = array1.indexOf(left);
+                    var numnode = idArray.indexOf(id);
                     console.log(numnode);
-                    if(numnode==-1){
-                    	num = 1;
-                    	Node.push(left);
-                    	Node.push(num);
-                    	Node.push((520-top)/2.5-50+4);
-                    	Node.push(top);
-                    	numnode = len/4;
-                    }else{
-                    	num = Node[numnode*4+1];
+                    if(top>220){//当前节点在鱼骨下方
+                    	if(numnode==-1){
+                        	num = 1;
+                        	Node.push(id);
+                        	Node.push(num);
+                        	if(left<120){//判断当前节点在下方的那个位置
+                        		Node.push((520-top)/2.5-50+4);
+                        	}else if(120<left && left<370){
+                        		Node.push((1145-top)/2.5-50+4);
+                        	}else{
+                        		Node.push((1770-top)/2.5-50+4);
+                        	}
+                        	Node.push(top);
+                        	numnode = len/4;
+                        }else{
+                        	num = Node[numnode*4+1];
+                        }
+                    }else{//当前节点在鱼骨的上方
+                    	if(numnode==-1){
+                        	num = 1;
+                        	Node.push(id);
+                        	Node.push(num);
+                        	if(left<245){//判断当前节点在上方的那个位置
+                        		Node.push((-330.75-top)/(-2.35)-50+4);
+                        	}else if(245<left && left<495){
+                        		Node.push((-918.25-top)/(-2.35)-50+4);
+                        	}else{
+                        		Node.push((-1508.1-top)/(-2.35)-50+4);
+                        	}
+                        	Node.push(top);
+                        	numnode = len/4;
+                        }else{
+                        	num = Node[numnode*4+1];
                     }
+                    }
+                    
                     console.log("这是更新前的数组："+Node);
                     var addNode = addExcelNode(left, top, num);
                     

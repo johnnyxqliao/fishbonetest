@@ -1581,6 +1581,7 @@ function(a) {
         this.initialize = function() {
             b.prototype.initialize.apply(this, arguments),
             this.elementType = "displayElement",
+            this.id = null,
             this.x = 0,
             this.y = 0,
             this.width = 32,
@@ -1600,7 +1601,7 @@ function(a) {
             this.shadowOffsetY = 6,
             this.transformAble = !1,
             this.zIndex = 0;
-            var a = "x,y,width,height,visible,alpha,rotate,scaleX,scaleY,strokeColor,fillColor,shadow,shadowColor,shadowOffsetX,shadowOffsetY,transformAble,zIndex".split(",");
+            var a = "id,x,y,width,height,visible,alpha,rotate,scaleX,scaleY,strokeColor,fillColor,shadow,shadowColor,shadowOffsetX,shadowOffsetY,transformAble,zIndex".split(",");
             this.serializedProperties = this.serializedProperties.concat(a)
         }
         ,
@@ -1660,7 +1661,8 @@ function(a) {
                 right: this.x + this.width,
                 bottom: this.y + this.height,
                 width: this.width,
-                height: this.height
+                height: this.height,
+                id:this.id
             }
         }
         ,
