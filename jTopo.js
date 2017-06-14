@@ -1635,9 +1635,9 @@ function(a) {
             }
         }
         ,
-        this.setCenterLocation = function(a, b) {
-            return this.x = a - this.width / 2,
-            this.y = b - this.height / 2,
+        this.setCenterLocation = function(a, b, c, d) {
+            return this.x =c-a,
+            this.y = d-b,
             this
         }
         ,
@@ -3314,15 +3314,22 @@ function(a) {
         }
         return k
     }
-    function o(a, b, c, d, e, f) {
+    function o(a, b, c, d, e, f, t) {
         var g = f || "bottom"
           , h = [];
-        if ("bottom" == g)
-            for (var i = a - c / 2 * d + d / 2, j = 0; c >= j; j++)
-                h.push({
-                    x: i + j * d,
-                    y: b + e
-                });
+        if ("bottom" == g){
+        	for (var i=0; i<t.length; i++){
+              	 h.push({
+                       x: t[t.length-2].x-t[i].x,
+                       y: t[t.length-2].y-t[i].y
+                   });
+              }
+        	h.pop();
+        	h.push({
+                x: t[t.length-1].x,
+                y: t[t.length-1].y
+            });
+        }
         else if ("top" == g)
             for (var i = a - c / 2 * d + d / 2, j = 0; c >= j; j++)
                 h.push({
@@ -3364,14 +3371,17 @@ function(a) {
                 var g = c.width || 50
                   , h = c.height || 50
                   , i = c.direction;
-                e = o(a.cx, a.cy, b.length, g, h, i)
+                e = o(a.cx, a.cy, b.length, g, h, i, b)
             } else {
                 if ("grid" != d)
                     return;
                 e = m(a.x, a.y, c.rows, c.cols, c.horizontal || 0, c.vertical || 0)
             }
-            for (var j = 0; j < b.length; j++)
-                b[j].setCenterLocation(e[j].x, e[j].y)
+            for (var j = 0; j < b.length-2; j++){
+            	var len = b.length-1;
+            	b[j].setCenterLocation(e[j].x, e[j].y, e[len].x, e[len].y)
+            }
+                
         }
     }
     function q(b, c) {
@@ -3381,10 +3391,15 @@ function(a) {
     }
     function r(a, b, c) {
         var d = q(a.childs, b);
+        d.push(c);
+        d.push(b);
         if (0 == d.length)
             return null;
+        c = Boolean(c);
         if (p(b, d),
         1 == c)
+        	d.pop();
+        	d.pop();
             for (var e = 0; e < d.length; e++)
                 r(a, d[e], c);
         return null

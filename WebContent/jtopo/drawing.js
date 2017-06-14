@@ -1,69 +1,29 @@
-//文本可编辑函数
-                CanvasRenderingContext2D.prototype.wrapText = function(str,x,y){
-				var textArray = str.split('\n');
-				console.log(textArray)
-				
-				if(textArray==undefined||textArray==null)return false;
-				var rowCnt = textArray.length;
-				var i = 0,imax  = rowCnt,maxLength = 0;maxText = textArray[0];
-				for(;i<imax;i++){
-					var nowText = textArray[i],textLength = nowText.length;
-					if(textLength >=maxLength){
-						maxLength = textLength;
-						maxText = nowText;
-					}
-				}
-				var maxWidth = this.measureText(maxText).width;
-				var lineHeight = this.measureText("元").width;
-				for(var j= 0;j<textArray.length;j++){
-					var words = textArray[j];
-					this.fillText(words,-(maxWidth/2),y-textArray.length*lineHeight/2);
-					y+= lineHeight;
-				}
-			  };    
-					JTopo.Node.prototype.paintText = function(a){
-						var b = this.text;
-						if (null != b && "" != b) {
-							a.beginPath(),
-									a.font = this.font;
-							var c = a.measureText(b).width,
-									d = a.measureText("田").width;
-							a.fillStyle = "rgba(" + this.fontColor + ", " + this.alpha + ")";
-							var e = this.getTextPostion(this.textPosition, c, d);
-							a.wrapText(b, e.x, e.y),
-									a.closePath()
-						}
-                  }	 
-					
+                          CanvasRenderingContext2D.prototype.wrapText = function(str,x,y){
+          				var textArray = str.split('\n');
+          				if(textArray==undefined||textArray==null)return false;
+           
+          				var rowCnt = textArray.length;
+          				var i = 0,imax  = rowCnt,maxLength = 0;maxText = textArray[0];
+          				for(;i<imax;i++){
+          					var nowText = textArray[i],textLength = nowText.length;
+          					if(textLength >=maxLength){
+          						maxLength = textLength;
+          						maxText = nowText;
+          					}
+          				}
+          				var maxWidth = this.measureText(maxText).width;
+          				var lineHeight = this.measureText("元").width;
+          				x-= lineHeight*2;
+          				for(var j= 0;j<textArray.length;j++){
+          					var words = textArray[j];
+          					this.fillText(words,-(maxWidth/2),y-textArray.length*lineHeight/2);
+          					y+= lineHeight;
+          				}
+          			  };                                     
 
-					
-					
-                     //定义一个画布
+//定义画布、舞台以及场景
                      var canvas = document.getElementById('canvas');//获取画布id
-                     
-                     CanvasRenderingContext2D.prototype.wrapText = function(str,x,y){
-         				var textArray = str.split('\n');
-         				if(textArray==undefined||textArray==null)return false;
-          
-         				var rowCnt = textArray.length;
-         				var i = 0,imax  = rowCnt,maxLength = 0;maxText = textArray[0];
-         				for(;i<imax;i++){
-         					var nowText = textArray[i],textLength = nowText.length;
-         					if(textLength >=maxLength){
-         						maxLength = textLength;
-         						maxText = nowText;
-         					}
-         				}
-         				var maxWidth = this.measureText(maxText).width;
-         				var lineHeight = this.measureText("元").width;
-         				x-= lineHeight*2;
-         				for(var j= 0;j<textArray.length;j++){
-         					var words = textArray[j];
-         					this.fillText(words,-(maxWidth/2),y-textArray.length*lineHeight/2);
-         					y+= lineHeight;
-         				}
-         			  };
-                     
+
                      var stage = new JTopo.Stage(canvas);//在画布上新建舞台
                      var scene = new JTopo.Scene(stage);//将舞台添加到场景中
                      scene.background = './images/background.jpg';//设置背景图片
@@ -73,7 +33,7 @@
                      fishBrain.text = '待解决问题';// 文字
                      fishBrain.id = "10";
                      fishBrain.textPosition = 'Middle_Center';// 文字居中
-                     fishBrain.textOffsetY =8;
+                     fishBrain.textOffsetY =-8;
                      fishBrain.font = '18px 微软雅黑';// 字体
                      fishBrain.fontColor = "0,0,0";
                      fishBrain.setLocation(800, 220);// 位置
@@ -83,10 +43,6 @@
                      fishBrain.fillColor = '255,222,173';//边框颜色 
                      fishBrain.dragable = false;
                      scene.add(fishBrain);
-//                     var aaa = fishBrain.getBound().id+" ";
-//                     if(aaa===10){
-//                    	 console.log(aaa);
-//                     }
                      
 
                      //绘制鱼身
@@ -96,99 +52,49 @@
                      link.lineWidth = 3;
                      link.strokeColor = '0,0,0';
                      scene.add(link);
-/* 
- *文本节点连线函数
- */                
-                function linkNode(nodeA, nodeB) {
-
-                    nodeA.textPosition = 'Middle_Center';
-                    nodeA.font = 'bold 16px 微软雅黑';
-                    nodeA.setSize(10, 10);
-                    nodeA.dragable = false;
-
-                    nodeB.dragable = false;
-                    var link = new JTopo.Link(nodeA,nodeB);
-                    link.lineWidth = 1;
-                    link.arrowsRadius = 15;
-                    link.strokeColor = '0,0,0';
-                    scene.add(link);
-                    return link;
-                }
-/* 
- *定义六个文字节点函数 
- *
- *
- */
-                function nodetext(x, y, text) {
-                    var nodetext = new JTopo.Node();
-                    
-                    if (y>220){
-                    	nodetext.setLocation(x+52, y-100);
-                    	nodetext.rotate = -1.2;
-                    	console.log("asdfa");
-                    }else{
-                    	nodetext.setLocation(x+47, y+90);
-                    	nodetext.rotate = 1.15;
-                    }
-                    nodetext.text = text;// 文字
-                    nodetext.textPosition = 'Middle_Center';// 文字居中
-                    nodetext.textOffsetY =8;
-                    nodetext.font = '16px 微软雅黑';// 字体
-                    nodetext.fontColor = "0,0,0";
-                    nodetext.setSize(120, 50);// 尺寸
-//                    nodetext.borderRadius = 20;// 圆角
-                    nodetext.borderWidth = 2;// 边框的宽度
-                    nodetext.fillColor = '0,191,255';//填充颜色 
-                    nodetext.dragable = false;
-                    scene.add(nodetext);
-                }
-/* 
- *定义鱼骨节点函数（用于与文本节点连线） 
- */
-                function node(x, y) {
-                    var node = new JTopo.Node();
-                    node.setLocation(x, y);
-                    return node;
-                    scene.add(node);
-                }
-
-
-                //添加节点
-                var n1 = node(77, 350);
-                var n2 = node(117, 220);//y=-2.5*x+520，人员
-
-                var n3 = node(193, 120);
-                var n4 = node(241, 245);//y=2.35*x-330.75，机器
-
-                var n5 = node(327, 350);
-                var n6 = node(367, 220);//y=-2.5*x+1145，物料
-
-                var n7 = node(443, 120);
-                var n8 = node(491, 245);//y=2.35*x-918.25，方法
-
-                var n9 = node(577, 350);
-                var n10 = node(617, 220);//y=-2.5*x+1770，环境
-
-                var n11 = node(695, 120);
-                var n12 = node(741, 245);//y=2.35*x-1508.1，测量
-
-                //连线
-                linkNode(n1, n2);
-                linkNode(n3, n4);
-                linkNode(n5, n6);
-                linkNode(n7, n8);
-                linkNode(n9, n10);
-                linkNode(n11, n12);
-
-                //添加文字
-                nodetext(-20, 470, "人 员");
-                nodetext(110, -10, "机 器");
-                nodetext(230, 470, "物 料");
-                nodetext(360, -10, "方 法");
-                nodetext(480, 470, "环 境");
-                nodetext(610, -10, "测 量");                
-                
-
+/*
+ * 定义六个主骨的位置
+ */                     
+                     function IniLine(x1, y1, x2, y2, text){
+                    	 //定义主骨上的节点
+                    	 var boneNode = new JTopo.Node();
+                    	 boneNode.setLocation(x1, y1);
+                    	 boneNode.layout = {type: 'tree'}
+                    	 scene.add(boneNode);
+                    	 //定义六个相关节点的信息
+                    	 var subNode = new JTopo.Node();
+                    	 if (y2>220){
+                    		 subNode.setLocation(x2+52, y2-100);
+                    		 subNode.rotate = -1.2;
+                         }else{
+                        	 subNode.setLocation(x2+47, y2+90);
+                        	 subNode.rotate = 1.15;
+                         }
+                    	 subNode.text = text;// 文字
+                         subNode.textPosition = 'Middle_Center';// 文字居中
+                         subNode.textOffsetY =-8;
+                         subNode.font = '16px 微软雅黑';// 字体
+                         subNode.fontColor = "0,0,0";
+                         subNode.setSize(120, 50);// 尺寸
+                         subNode.borderWidth = 2;// 边框的宽度
+                         subNode.fillColor = '0,191,255';//填充颜色 
+                         subNode.dragable = false;
+                         scene.add(subNode);
+                         //连线
+                         var link = new JTopo.FlexionalLink(boneNode, subNode, 0, 0, 1.2);
+                         link.lineWidth = 1;
+                         link.strokeColor = '0,0,0';
+                         scene.add(link);
+                         return link;
+                     }
+                     
+                     
+                     var iniLineMan = IniLine(117, 220, -20, 470, "人 员");
+                     var iniLineMachine = IniLine(241, 245, 110, -10, "机 器");
+                     var iniLineMaterial = IniLine(367, 220, 230, 470, "物 料");
+                     var iniLineMethod = IniLine(491, 245, 360, -10, "方 法");
+                     var iniLineEnvironment = IniLine(617, 220, 480, 470, "环 境");
+                     var iniLineMeasure = IniLine(741, 245, 610, -10, "测 量");
 /* 
  *读取excel部分 
  */
@@ -455,137 +361,7 @@
                 }
                     
                     
-//获取表4的数据
-                    var SheetNum4 = excelData.Sheet4.length;
-                    var Coordinate4 = new Array();
-                    Coordinate4[0] =0;
-                    for (var i = 0; i < SheetNum4; i++) {
-                    	var x = 495-(i+1)*30;
-                        var y = 2.35*x - 918.25;
-                  //定义第二级文本节点
-                    var textnode = excelData.Sheet4[i].Method;//提取表格中的数据
-                    var id = textnode+i;
-                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
-                    
-                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
-                    nullnode.setLocation(x-65, y+15);
-                    nullnode.setSize(1, 1);
-                     scene.add(nullnode);
-                    
-                    var nullNode = new JTopo.Node();//下划线的第二个空节点
-                    nullNode.setLocation(x-5, y);
-                    
-                    var link = new JTopo.Link(nullnode, nullNode);
-                    link.strokeColor = '0,0,0';
-                    link.lineWidth = 1;
-                    
-                    Coordinate4.push(x+10);
-                    Coordinate4.push(y+15);
-                    if (Coordinate4[2*i]!==0){
-                    	var nullSlashNode = new JTopo.Node();
-                    	var xSlashNode = Coordinate4[2*i-1];
-                    	var ySlashNode = Coordinate4[2*i];
-                    	console.log(ySlashNode);
-                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
-                    	nullSlashNode.setSize(1, 1);
-                        scene.add(nullSlashNode);
-                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
-                    	linkSlash.strokeColor = '0,0,0';
-                    	linkSlash.lineWidth = 1;
-                    	scene.add(linkSlash);
-                    }
-                    scene.add(link);
-                }
-                    
-                    
-//获取表5的数据
-                    var SheetNum5 = excelData.Sheet5.length;
-                    var Coordinate5 = new Array();
-                    Coordinate5[0] =0;
-                    for (var i = 0; i < SheetNum5; i++) {
-                    	var x = 620-(i+1)*30;
-                        var y = -2.5*x + 1770;
-                  //定义第二级文本节点
-                    var textnode = excelData.Sheet5[i].Environment;//提取表格中的数据
-                    var id = textnode+i;
-                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
-                    
-                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
-                    if(y>220){
-                    	nullnode.setLocation(x-65, y+15);
-                    }else{
-                    	nullnode.setLocation(x+65, y-15);
-                    }
-                    nullnode.setSize(1, 1);
-                     scene.add(nullnode);
-                    
-                    var nullNode = new JTopo.Node();//下划线的第二个空节点
-                    nullNode.setLocation(x-5, y);
-                    
-                    var link = new JTopo.Link(nullnode, nullNode);
-                    link.strokeColor = '0,0,0';
-                    link.lineWidth = 1;
-                    
-                    Coordinate5.push(x+11);
-                    Coordinate5.push(y+15);
-                    if (Coordinate5[2*i]!==0){
-                    	var nullSlashNode = new JTopo.Node();
-                    	var xSlashNode = Coordinate5[2*i-1];
-                    	var ySlashNode = Coordinate5[2*i];
-                    	console.log(ySlashNode);
-                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
-                    	nullSlashNode.setSize(1, 1);
-                        scene.add(nullSlashNode);
-                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
-                    	linkSlash.strokeColor = '0,0,0';
-                    	linkSlash.lineWidth = 1;
-                    	scene.add(linkSlash);
-                    }
-                    scene.add(link);
-                }
-                    
-                    
-//获取表6的数据
-                    var SheetNum6 = excelData.Sheet6.length;
-                    var Coordinate6 = new Array();
-                    Coordinate6[0] =0;
-                    for (var i = 0; i < SheetNum6; i++) {
-                    	var x = 745-(i+1)*30;
-                        var y = 2.35*x - 1508.1;
-                  //定义第二级文本节点
-                    var textnode = excelData.Sheet6[i].Measure;//提取表格中的数据
-                    var id = textnode+i;
-                    var excelnode = excelNode(x-50, y, textnode, id);//画节点
-                    
-                    var nullnode = new JTopo.Node();//定义空节点，将表格中的数据节点连起来，形成下划线
-                    nullnode.setLocation(x-65, y+15);
-                    nullnode.setSize(1, 1);
-                     scene.add(nullnode);
-                    
-                    var nullNode = new JTopo.Node();//下划线的第二个空节点
-                    nullNode.setLocation(x-5, y);
-                    
-                    var link = new JTopo.Link(nullnode, nullNode);
-                    link.strokeColor = '0,0,0';
-                    link.lineWidth = 1;
-                    
-                    Coordinate6.push(x+10);
-                    Coordinate6.push(y+15);
-                    if (Coordinate6[2*i]!==0){
-                    	var nullSlashNode = new JTopo.Node();
-                    	var xSlashNode = Coordinate6[2*i-1];
-                    	var ySlashNode = Coordinate6[2*i];
-                    	console.log(ySlashNode);
-                    	nullSlashNode.setLocation(xSlashNode, ySlashNode);
-                    	nullSlashNode.setSize(1, 1);
-                        scene.add(nullSlashNode);
-                    	var linkSlash = new JTopo.Link(nullSlashNode, nullNode);
-                    	linkSlash.strokeColor = '0,0,0';
-                    	linkSlash.lineWidth = 1;
-                    	scene.add(linkSlash);
-                    }
-                    scene.add(link);
-                }
+
                     
                 }
                 
@@ -599,7 +375,7 @@
                 	excelNode.id = id;
                 	excelNode.setLocation(x, y);
                 	excelNode.textPosition = 'Middle_Center';
-                	excelNode.textOffsetY =5;
+                	excelNode.textOffsetY =-5;
                 	excelNode.fontColor = "0,0,0";
                 	excelNode.fillColor = "255,255,255";
                 	excelNode.font = '14px 微软雅黑';

@@ -1635,9 +1635,9 @@ function(a) {
             }
         }
         ,
-        this.setCenterLocation = function(a, b, c, d) {
-            return this.x =c-a,
-            this.y = d-b,
+        this.setCenterLocation = function(a, b, e) {
+            return this.x = a - this.width / 2,
+            this.y = b - this.height / 2,
             this
         }
         ,
@@ -2766,21 +2766,21 @@ function(a) {
             }
         }
     }
-    function h(a, b, c) {
+    function h(a, b, c, j, s) {
         this.initialize = function() {
             h.prototype.initialize.apply(this, arguments),
             this.direction = "vertical",
-            this.offsetGap = 44
+            this.offsetGapx1 = c        ,
+            this.offsetGapx2 = j
         }
         ,
         this.initialize(a, b, c),
         this.getStartPosition = function() {
             var a = {
-                x: this.nodeA.cx,
-                y: this.nodeA.cy
+                x: this.nodeA.cx-this.nodeA.width/2,
+                y: this.nodeA.cy-this.nodeA.height/2
             };
-            return "horizontal" == this.direction ? a.x = this.nodeZ.cx < a.x ? this.nodeA.x : this.nodeA.x + this.nodeA.width : a.y = this.nodeZ.cy < a.y ? this.nodeA.y : this.nodeA.y + this.nodeA.height,
-            a
+            return a
         }
         ,
         this.getEndPosition = function() {
@@ -2788,8 +2788,7 @@ function(a) {
                 x: this.nodeZ.cx,
                 y: this.nodeZ.cy
             };
-            return "horizontal" == this.direction ? a.x = this.nodeA.cx < a.x ? this.nodeZ.x : this.nodeZ.x + this.nodeZ.width : a.y = this.nodeA.cy < a.y ? this.nodeZ.y : this.nodeZ.y + this.nodeZ.height,
-            a
+            return a
         }
         ,
         this.getPath = function(a) {
@@ -2800,39 +2799,39 @@ function(a) {
             var d = []
               , f = e(this.nodeA, this.nodeZ)
               , g = (f - 1) * this.bundleGap
-              , h = this.bundleGap * a - g / 2
-              , i = this.offsetGap;
+              , i = this.offsetGapx1
+              , l = this.offsetGapx2;
             return "horizontal" == this.direction ? (this.nodeA.cx > this.nodeZ.cx && (i = -i),
             d.push({
                 x: b.x,
-                y: b.y + h
-            }),
-            d.push({
-                x: b.x + i,
-                y: b.y + h
-            }),
-            d.push({
-                x: c.x - i,
-                y: c.y + h
-            }),
-            d.push({
-                x: c.x,
-                y: c.y + h
-            })) : (this.nodeA.cy > this.nodeZ.cy && (i = -i),
-            d.push({
-                x: b.x + h,
                 y: b.y
             }),
             d.push({
-                x: b.x + h,
+                x: b.x + i,
+                y: b.y
+            }),
+            d.push({
+                x: c.x - l,
+                y: c.y
+            }),
+            d.push({
+                x: c.x,
+                y: c.y
+            })) : (this.nodeA.cy > this.nodeZ.cy && (i = -i),
+            d.push({
+                x: b.x,
+                y: b.y
+            }),
+            d.push({
+                x: b.x,
                 y: b.y + i
             }),
             d.push({
-                x: c.x + h,
-                y: c.y - i
+                x: c.x,
+                y: c.y - l
             }),
             d.push({
-                x: c.x + h,
+                x: c.x,
                 y: c.y
             })),
             d
@@ -3314,22 +3313,15 @@ function(a) {
         }
         return k
     }
-    function o(a, b, c, d, e, f, t) {
+    function o(a, b, c, d, e, f) {
         var g = f || "bottom"
           , h = [];
-        if ("bottom" == g){
-        	for (var i=0; i<t.length; i++){
-              	 h.push({
-                       x: t[t.length-2].x-t[i].x,
-                       y: t[t.length-2].y-t[i].y
-                   });
-              }
-        	h.pop();
-        	h.push({
-                x: t[t.length-1].x,
-                y: t[t.length-1].y
-            });
-        }
+        if ("bottom" == g)
+            for (var i = a - c / 2 * d + d / 2, j = 0; c >= j; j++)
+                h.push({
+                    x: i + j * d,
+                    y: b + e
+                });
         else if ("top" == g)
             for (var i = a - c / 2 * d + d / 2, j = 0; c >= j; j++)
                 h.push({
@@ -3371,17 +3363,14 @@ function(a) {
                 var g = c.width || 50
                   , h = c.height || 50
                   , i = c.direction;
-                e = o(a.cx, a.cy, b.length, g, h, i, b)
+                e = o(a.cx, a.cy, b.length, g, h, i)
             } else {
                 if ("grid" != d)
                     return;
                 e = m(a.x, a.y, c.rows, c.cols, c.horizontal || 0, c.vertical || 0)
             }
-            for (var j = 0; j < b.length-2; j++){
-            	var len = b.length-1;
-            	b[j].setCenterLocation(e[j].x, e[j].y, e[len].x, e[len].y)
-            }
-                
+            for (var j = 0; j < b.length; j++)
+                b[j].setCenterLocation(e[j].x, e[j].y, e)
         }
     }
     function q(b, c) {
@@ -3391,15 +3380,10 @@ function(a) {
     }
     function r(a, b, c) {
         var d = q(a.childs, b);
-        d.push(c);
-        d.push(b);
         if (0 == d.length)
             return null;
-        c = Boolean(c);
         if (p(b, d),
         1 == c)
-        	d.pop();
-        	d.pop();
             for (var e = 0; e < d.length; e++)
                 r(a, d[e], c);
         return null
